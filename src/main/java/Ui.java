@@ -2,7 +2,9 @@ import java.util.Scanner;
 
 public class Ui {
     private static final String STRAIGHT_LINE = "____________________________________________________________";
-    private final Scanner scanner = new Scanner(System.in); // mutable instance
+    private final Scanner scanner = new Scanner(System.in); // user CLI input
+
+    // class handles printing of text, user input and system output
 
     public void userWelcome() {
         System.out.println(STRAIGHT_LINE);
@@ -25,5 +27,19 @@ public class Ui {
         System.out.println(STRAIGHT_LINE);
         System.out.println("\n" + command + "\n");
         System.out.println(STRAIGHT_LINE);
+    }
+
+    public void showTasklist(TaskList tasklist) {
+        for (int i = 0; i < tasklist.getSize(); i++) {
+            System.out.println((i + 1) + ". " + tasklist.getTasks()[i]);
+        }
+        System.out.println("\n" + STRAIGHT_LINE);
+
+    }
+
+    public void showAddedtask(String task) {
+        System.out.println("added: " + task);
+        System.out.println("\n" + STRAIGHT_LINE);
+
     }
 }

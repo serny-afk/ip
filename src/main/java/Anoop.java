@@ -1,24 +1,42 @@
 public class Anoop {
+
+    private final Ui ui;
+    private final TaskList tasklist;
+
+    public Anoop(Ui ui, TaskList tasklist) {
+        this.ui = ui;
+        this.tasklist = tasklist;
+
+    }
     public static void main(String[] args) {
-        new Anoop().run();
+        Ui ui = new Ui();
+        TaskList taskList = new TaskList();
+        new Anoop(ui, taskList).run();
     }
 
     private void run() {
-        Ui ui = new Ui();
-        ui.userWelcome();
+        this.ui.userWelcome();
 
         while (true) {
-            String command = ui.readCommand();
+            String command = this.ui.readCommand();
 
             if (command.equals("bye")) {
-                ui.userGoodbye();
+                this.ui.userGoodbye();
                 break;
+            } else if (command.equals("list")) {
+                this.ui.showTasklist(this.tasklist);
             } else {
-                ui.userEcho(command);
+                try {
+                    this.tasklist.addTask(command);
+                    this.ui.showAddedtask(command);
+                } catch (TaskListFullException e) {
+                    System.out.println(e.getMessage());
+                }
             }
-
         }
+
     }
+
 }
 
 
