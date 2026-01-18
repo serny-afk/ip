@@ -1,11 +1,24 @@
 public class Anoop {
     public static void main(String[] args) {
-        String line = "____________________________________________________________";
+        new Anoop().run();
+    }
 
-        System.out.println(line + "\nHello, I'm Anoop. I'm taking 48 MCs this sem.");
-        System.out.println("\nWhat can I do for you?\n" + line);
-        System.out.println("\nBye! See you when I graduate this sem!\n" + line);
+    private void run() {
+        Ui ui = new Ui();
+        ui.userWelcome();
 
+        while (true) {
+            String command = ui.readCommand();
 
+            if (command.equals("bye")) {
+                ui.userGoodbye();
+                break;
+            } else {
+                ui.userEcho(command);
+            }
+
+        }
     }
 }
+
+
