@@ -30,16 +30,37 @@ public class Ui {
     }
 
     public void showTasklist(TaskList tasklist) {
+        System.out.println("\n" + STRAIGHT_LINE);
+        System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < tasklist.getSize(); i++) {
-            System.out.println((i + 1) + ". " + tasklist.getTasks()[i]);
+            System.out.println((i + 1) + "." + tasklist.getTask(i).toString());
         }
         System.out.println("\n" + STRAIGHT_LINE);
 
     }
 
     public void showAddedtask(String task) {
+        System.out.println("\n" + STRAIGHT_LINE);
         System.out.println("added: " + task);
         System.out.println("\n" + STRAIGHT_LINE);
 
     }
+
+    public void showMarkedtask(Task task) {
+        System.out.println("\n" + STRAIGHT_LINE);
+        System.out.println("\n" + "Nice! I've marked this task as done:");
+        System.out.println(task.toString());
+        System.out.println("\n" + STRAIGHT_LINE);
+    }
+
+    public void showUnmarkedtask(Task task) {
+        System.out.println("\n" + STRAIGHT_LINE);
+        System.out.println("\n" + "OK, I've marked this task as not done yet:");
+        System.out.println(task.toString());
+        System.out.println("\n" + STRAIGHT_LINE);
+
+
+    }
+
+
 }

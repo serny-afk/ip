@@ -1,9 +1,9 @@
 public class TaskList {
     private int size;
-    private final String[] tasks;
+    private final Task[] tasks;
 
     public TaskList() {
-        this.tasks = new String[100];
+        this.tasks = new Task[100];
         size = 0;
     }
 
@@ -11,15 +11,22 @@ public class TaskList {
         return this.size;
     }
 
-    public void addTask(String task) {
+    public void addTask(String description) {
         if (size >= tasks.length) {
             throw new TaskListFullException("Task list has exceeded capacity.");
         }
-        tasks[this.size++] = task;
+        tasks[this.size++] = new Task(description);
     }
 
-    public String[] getTasks() {
-        String[] currentTasks = new String[this.size];
+    public Task getTask(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Invalid task index.");
+        }
+        return this.tasks[index];
+    }
+
+    public Task[] getTasks() {
+        Task[] currentTasks = new Task[this.size];
         for (int i = 0; i < this.size; i++) {
             currentTasks[i] = this.tasks[i];
         }

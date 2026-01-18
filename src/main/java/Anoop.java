@@ -18,25 +18,47 @@ public class Anoop {
         this.ui.userWelcome();
 
         while (true) {
-            String command = this.ui.readCommand();
+            String command = this.ui.readCommand().trim(); // ignore whitespace
 
-            if (command.equals("bye")) {
+            if (command.equalsIgnoreCase("bye")) {
                 this.ui.userGoodbye();
                 break;
-            } else if (command.equals("list")) {
+
+            } else if (command.equalsIgnoreCase("list")) {
                 this.ui.showTasklist(this.tasklist);
+
+            } else if (command.toLowerCase().startsWith("mark ")) {
+                try {
+                    int index = Integer.parseInt(command.substring(5).trim()) - 1; // ?
+                    Task task = this.tasklist.getTask(index);
+                    task.markAsDone();
+                    this.ui.showMarkedtask(task);
+
+                } catch (Exception e) {
+                    System.out.println("Invalid task number");
+                }
+
+            } else if (command.toLowerCase().startsWith("unmark ")) {
+                try {
+                    int index = Integer.parseInt(command.substring(7).trim()) - 1;
+                    Task task = this.tasklist.getTask(index);
+                    task.markAsUndone();
+                    ui.showUnmarkedtask(task);
+                } catch (Exception e) {
+                    System.out.println("Invalid task number");
+                }
+
             } else {
                 try {
                     this.tasklist.addTask(command);
-                    this.ui.showAddedtask(command);
+                    ui.showAddedtask(command);
                 } catch (TaskListFullException e) {
                     System.out.println(e.getMessage());
                 }
             }
+
         }
-
     }
-
 }
 
 
