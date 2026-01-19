@@ -14,6 +14,10 @@ public class Anoop {
         new Anoop(ui, taskList).run();
     }
 
+    // Use of ChatGPT for overall formatting of try-catch blocks, substring manipulation
+    // i.e. trim, substring methods, as well as overall class organization / design choice
+    // (e.g. where printing should be handled, etc.)
+
     private void run() {
         this.ui.userWelcome();
 
