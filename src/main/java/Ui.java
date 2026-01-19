@@ -39,9 +39,9 @@ public class Ui {
 
     }
 
-    public void showAddedtask(String task) {
+    public void showAddedtask(Task task) {
         System.out.println("\n" + STRAIGHT_LINE);
-        System.out.println("added: " + task);
+        System.out.println("added: " + task.toString());
         System.out.println("\n" + STRAIGHT_LINE);
 
     }
@@ -58,8 +58,12 @@ public class Ui {
         System.out.println("\n" + "OK, I've marked this task as not done yet:");
         System.out.println(task.toString());
         System.out.println("\n" + STRAIGHT_LINE);
+    }
 
-
+    public void showCommanderror() {
+        System.out.println("\n" + STRAIGHT_LINE);
+        System.out.println("\n" + "Error. Command not recognized.");
+        System.out.println("\n" + STRAIGHT_LINE);
     }
 
 

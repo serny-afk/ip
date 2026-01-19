@@ -48,13 +48,41 @@ public class Anoop {
                     System.out.println("Invalid task number");
                 }
 
-            } else {
-                try {
-                    this.tasklist.addTask(command);
-                    ui.showAddedtask(command);
-                } catch (TaskListFullException e) {
-                    System.out.println(e.getMessage());
-                }
+            } else if (command.toLowerCase().startsWith("todo ")) {
+                String description = command.substring(5).trim();
+                Task todo = new ToDo(description);
+                this.tasklist.addTask(todo);
+                this.ui.showAddedtask(todo);
+
+            } else if (command.toLowerCase().startsWith("deadline ")) {
+                String content = command.substring(9).trim();
+                String[] parts = content.split(" /by ");
+
+                String description = parts[0];
+                String by = parts[1];
+
+                Task deadline = new Deadline(description, by);
+                this.tasklist.addTask(deadline);
+                this.ui.showAddedtask(deadline);
+
+            } else if (command.toLowerCase().startsWith("event ")) {
+                String content = command.substring(6).trim();
+                String[] parts = content.split(" /from ");
+
+                String description = parts[0];
+
+                String[] timeParts = parts[1].split(" /to ");
+                String from = timeParts[0];
+                String to = timeParts[1];
+
+                Task event = new Event(description, from, to);
+                this.tasklist.addTask(event);
+                this.ui.showAddedtask(event);
+            }
+
+
+            else {
+                this.ui.showCommanderror();
             }
 
         }

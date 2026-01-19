@@ -11,11 +11,11 @@ public class TaskList {
         return this.size;
     }
 
-    public void addTask(String description) {
+    public void addTask(Task task) {
         if (size >= tasks.length) {
             throw new TaskListFullException("Task list has exceeded capacity.");
         }
-        tasks[this.size++] = new Task(description);
+        tasks[this.size++] = task;
     }
 
     public Task getTask(int index) {
