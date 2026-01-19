@@ -74,4 +74,11 @@ public class Ui {
         System.out.println("\n" + STRAIGHT_LINE);
     }
 
+    public void showDeletedTask(Task task, TaskList tasklist) {
+        System.out.println("\n" + STRAIGHT_LINE);
+        System.out.println("Noted. I've removed this task:\n  " + task.toString());
+        System.out.println(tasklist.toString());
+        System.out.println("\n" + STRAIGHT_LINE);
+    }
+
 }

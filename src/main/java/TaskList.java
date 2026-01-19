@@ -1,42 +1,41 @@
+import java.util.ArrayList;
+
 public class TaskList {
-    private int size;
-    private final Task[] tasks;
-    private static final int MAX_SIZE = 100;
+    private final ArrayList<Task> tasks;
 
     public TaskList() {
-        this.tasks = new Task[MAX_SIZE];
-        size = 0;
+        this.tasks = new ArrayList<>();
     }
 
     public int getSize() {
-        return this.size;
+        return this.tasks.size();
     }
 
-    public void addTask(Task task) throws TaskListFullException {
-        if (this.size >= MAX_SIZE) {
-            throw new TaskListFullException();
-        }
-        tasks[this.size++] = task;
+    public void addTask(Task task) {
+        this.tasks.add(task);
     }
 
     public Task getTask(int index) throws InvalidTaskNumberException {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index >= tasks.size()) {
             throw new InvalidTaskNumberException();
         }
-        return this.tasks[index];
+        return this.tasks.get(index);
     }
 
-    public Task[] getTasks() {
-        Task[] currentTasks = new Task[this.size];
-        for (int i = 0; i < this.size; i++) {
-            currentTasks[i] = this.tasks[i];
+    public void deleteTask(int index) throws InvalidTaskNumberException {
+        if (index < 0 || index >= tasks.size()) {
+            throw new InvalidTaskNumberException();
         }
-        return currentTasks;
+        this.tasks.remove(index);
+    }
+
+    public ArrayList<Task> getTasks() {
+        return new ArrayList<>(this.tasks);
     }
 
     @Override
     public String toString() {
-        return "Now you have " + this.size + " tasks in the list.";
+        return "Now you have " + this.tasks.size() + " tasks in the list.";
     }
 
 }

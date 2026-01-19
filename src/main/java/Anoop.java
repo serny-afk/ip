@@ -18,7 +18,7 @@ public class Anoop {
         this.ui.userWelcome();
 
         while (true) {
-            String command = this.ui.readCommand().trim();
+            String command = this.ui.readCommand().trim(); // trim once at the start
 
             try {
                 if (command.equalsIgnoreCase("bye")) {
@@ -40,8 +40,18 @@ public class Anoop {
                     task.markAsUndone();
                     this.ui.showUnmarkedtask(task);
 
+                } else if (command.toLowerCase().startsWith("delete ")) {
+                    String arg = command.substring(7).trim();
+                    if (arg.isEmpty()) {
+                        throw new InvalidTaskNumberException();
+                    }
+                    int index = Integer.parseInt(arg) - 1;
+                    Task removedTask = this.tasklist.getTask(index);
+                    this.tasklist.deleteTask(index);
+                    this.ui.showDeletedTask(removedTask, this.tasklist);
+
                 } else if (command.toLowerCase().startsWith("todo")) {
-                    String description = command.length() > 4 ? command.substring(5).trim() : "";
+                    String description = command.substring(4).trim();
                     if (description.isEmpty()) throw new EmptyDescriptionException("todo");
 
                     Task todo = new ToDo(description);
@@ -50,27 +60,32 @@ public class Anoop {
                     this.ui.showTaskcount(this.tasklist);
 
                 } else if (command.toLowerCase().startsWith("deadline")) {
-                    String content = command.length() > 8 ? command.substring(9).trim() : "";
+                    String content = command.substring(8).trim();
                     if (!content.contains(" /by ")) throw new MissingByException();
 
                     String[] parts = content.split(" /by ", 2);
-                    if (parts[0].trim().isEmpty()) throw new EmptyDescriptionException("deadline");
+                    String description = parts[0].trim();
+                    String by = parts[1].trim();
+                    if (description.isEmpty()) throw new EmptyDescriptionException("deadline");
 
-                    Task deadline = new Deadline(parts[0].trim(), parts[1].trim());
+                    Task deadline = new Deadline(description, by);
                     this.tasklist.addTask(deadline);
                     this.ui.showAddedtask(deadline);
                     this.ui.showTaskcount(this.tasklist);
 
                 } else if (command.toLowerCase().startsWith("event")) {
-                    String content = command.length() > 5 ? command.substring(6).trim() : "";
+                    String content = command.substring(5).trim();
                     if (!content.contains(" /from ") || !content.contains(" /to ")) throw new MissingFromToException();
 
                     String[] parts = content.split(" /from ", 2);
-                    if (parts[0].trim().isEmpty()) throw new EmptyDescriptionException("event");
+                    String description = parts[0].trim();
+                    if (description.isEmpty()) throw new EmptyDescriptionException("event");
 
                     String[] times = parts[1].split(" /to ", 2);
-                    Task event = new Event(parts[0].trim(), times[0].trim(), times[1].trim());
+                    String from = times[0].trim();
+                    String to = times[1].trim();
 
+                    Task event = new Event(description, from, to);
                     this.tasklist.addTask(event);
                     this.ui.showAddedtask(event);
                     this.ui.showTaskcount(this.tasklist);
