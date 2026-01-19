@@ -1,9 +1,10 @@
 public class TaskList {
     private int size;
     private final Task[] tasks;
+    private static final int MAX_SIZE = 100;
 
     public TaskList() {
-        this.tasks = new Task[100];
+        this.tasks = new Task[MAX_SIZE];
         size = 0;
     }
 
@@ -11,16 +12,16 @@ public class TaskList {
         return this.size;
     }
 
-    public void addTask(Task task) {
-        if (size >= tasks.length) {
-            throw new TaskListFullException("Task list has exceeded capacity.");
+    public void addTask(Task task) throws TaskListFullException {
+        if (this.size >= MAX_SIZE) {
+            throw new TaskListFullException();
         }
         tasks[this.size++] = task;
     }
 
-    public Task getTask(int index) {
+    public Task getTask(int index) throws InvalidTaskNumberException {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Invalid task index.");
+            throw new InvalidTaskNumberException();
         }
         return this.tasks[index];
     }
@@ -31,6 +32,11 @@ public class TaskList {
             currentTasks[i] = this.tasks[i];
         }
         return currentTasks;
+    }
+
+    @Override
+    public String toString() {
+        return "Now you have " + this.size + " tasks in the list.";
     }
 
 }

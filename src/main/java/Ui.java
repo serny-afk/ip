@@ -32,18 +32,21 @@ public class Ui {
     public void showTasklist(TaskList tasklist) {
         System.out.println("\n" + STRAIGHT_LINE);
         System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < tasklist.getSize(); i++) {
-            System.out.println((i + 1) + "." + tasklist.getTask(i).toString());
+        try {
+            for (int i = 0; i < tasklist.getSize(); i++) {
+                System.out.println((i + 1) + "." + tasklist.getTask(i).toString());
+            }
+        } catch (InvalidTaskNumberException e) {
+            System.out.println(e.getMessage());
         }
+
         System.out.println("\n" + STRAIGHT_LINE);
 
     }
 
     public void showAddedtask(Task task) {
         System.out.println("\n" + STRAIGHT_LINE);
-        System.out.println("added: " + task.toString());
-        System.out.println("\n" + STRAIGHT_LINE);
-
+        System.out.println("Got it. I've added this task:\n" + task.toString());
     }
 
     public void showMarkedtask(Task task) {
@@ -60,11 +63,15 @@ public class Ui {
         System.out.println("\n" + STRAIGHT_LINE);
     }
 
-    public void showCommanderror() {
+    public void showError(String errorMessage) {
         System.out.println("\n" + STRAIGHT_LINE);
-        System.out.println("\n" + "Error. Command not recognized.");
+        System.out.println("\n" + "Error. " + errorMessage);
         System.out.println("\n" + STRAIGHT_LINE);
     }
 
+    public void showTaskcount(TaskList tasklist) {
+        System.out.println(tasklist.toString());
+        System.out.println("\n" + STRAIGHT_LINE);
+    }
 
 }
