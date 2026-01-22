@@ -1,17 +1,30 @@
+import java.util.ArrayList;
+
 public class Anoop {
 
     private final Ui ui;
     private final TaskList tasklist;
+    private final Storage storage;
 
-    public Anoop(Ui ui, TaskList tasklist) {
+    public Anoop(Ui ui, TaskList tasklist, Storage storage) {
         this.ui = ui;
         this.tasklist = tasklist;
+        this.storage = storage;
     }
 
     public static void main(String[] args) {
         Ui ui = new Ui();
-        TaskList taskList = new TaskList();
-        new Anoop(ui, taskList).run();
+        Storage storage =  new Storage("./data/Anoop.txt");
+
+        TaskList loadedTasks = new TaskList();
+
+        try {
+            loadedTasks = storage.load();
+        } catch (Exception e) {
+            ui.showError("Failed to load tasks: " + e.getMessage());
+        }
+
+        new Anoop(ui, loadedTasks, storage).run();
     }
 
     // Use of ChatGPT for overall formatting of try-catch blocks, substring manipulation
@@ -30,19 +43,21 @@ public class Anoop {
                     break;
 
                 } else if (command.equalsIgnoreCase("list")) {
-                    this.ui.showTasklist(this.tasklist);
+                    this.ui.showTaskList(this.tasklist);
 
                 } else if (command.toLowerCase().startsWith("mark ")) {
                     int index = Integer.parseInt(command.substring(5).trim()) - 1;
                     Task task = this.tasklist.getTask(index);
                     task.markAsDone();
-                    this.ui.showMarkedtask(task);
+                    this.saveTasks();
+                    this.ui.showMarkedTask(task);
 
                 } else if (command.toLowerCase().startsWith("unmark ")) {
                     int index = Integer.parseInt(command.substring(7).trim()) - 1;
                     Task task = this.tasklist.getTask(index);
                     task.markAsUndone();
-                    this.ui.showUnmarkedtask(task);
+                    this.saveTasks();
+                    this.ui.showUnmarkedTask(task);
 
                 } else if (command.toLowerCase().startsWith("delete ")) {
                     String arg = command.substring(7).trim();
@@ -52,6 +67,7 @@ public class Anoop {
                     int index = Integer.parseInt(arg) - 1;
                     Task removedTask = this.tasklist.getTask(index);
                     this.tasklist.deleteTask(index);
+                    this.saveTasks();
                     this.ui.showDeletedTask(removedTask, this.tasklist);
 
                 } else if (command.toLowerCase().startsWith("todo")) {
@@ -60,8 +76,9 @@ public class Anoop {
 
                     Task todo = new ToDo(description);
                     this.tasklist.addTask(todo);
-                    this.ui.showAddedtask(todo);
-                    this.ui.showTaskcount(this.tasklist);
+                    this.saveTasks();
+                    this.ui.showAddedTask(todo);
+                    this.ui.showTaskCount(this.tasklist);
 
                 } else if (command.toLowerCase().startsWith("deadline")) {
                     String content = command.substring(8).trim();
@@ -74,8 +91,9 @@ public class Anoop {
 
                     Task deadline = new Deadline(description, by);
                     this.tasklist.addTask(deadline);
-                    this.ui.showAddedtask(deadline);
-                    this.ui.showTaskcount(this.tasklist);
+                    this.saveTasks();
+                    this.ui.showAddedTask(deadline);
+                    this.ui.showTaskCount(this.tasklist);
 
                 } else if (command.toLowerCase().startsWith("event")) {
                     String content = command.substring(5).trim();
@@ -91,8 +109,9 @@ public class Anoop {
 
                     Task event = new Event(description, from, to);
                     this.tasklist.addTask(event);
-                    this.ui.showAddedtask(event);
-                    this.ui.showTaskcount(this.tasklist);
+                    this.saveTasks();
+                    this.ui.showAddedTask(event);
+                    this.ui.showTaskCount(this.tasklist);
 
                 } else {
                     throw new UnknownCommandException();
@@ -105,6 +124,14 @@ public class Anoop {
             } catch (Exception e) {
                 this.ui.showError("Something went wrong: " + e.getMessage());
             }
+        }
+    }
+
+    private void saveTasks() {
+        try {
+            this.storage.save(this.tasklist.getTasks());
+        } catch (Exception e) {
+            this.ui.showError(e.getMessage());
         }
     }
 }

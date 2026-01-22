@@ -29,7 +29,7 @@ public class Ui {
         System.out.println(STRAIGHT_LINE);
     }
 
-    public void showTasklist(TaskList tasklist) {
+    public void showTaskList(TaskList tasklist) {
         System.out.println("\n" + STRAIGHT_LINE);
         System.out.println("Here are the tasks in your list:");
         try {
@@ -44,19 +44,19 @@ public class Ui {
 
     }
 
-    public void showAddedtask(Task task) {
+    public void showAddedTask(Task task) {
         System.out.println("\n" + STRAIGHT_LINE);
         System.out.println("Got it. I've added this task:\n" + task.toString());
     }
 
-    public void showMarkedtask(Task task) {
+    public void showMarkedTask(Task task) {
         System.out.println("\n" + STRAIGHT_LINE);
         System.out.println("\n" + "Nice! I've marked this task as done:");
         System.out.println(task.toString());
         System.out.println("\n" + STRAIGHT_LINE);
     }
 
-    public void showUnmarkedtask(Task task) {
+    public void showUnmarkedTask(Task task) {
         System.out.println("\n" + STRAIGHT_LINE);
         System.out.println("\n" + "OK, I've marked this task as not done yet:");
         System.out.println(task.toString());
@@ -69,7 +69,7 @@ public class Ui {
         System.out.println("\n" + STRAIGHT_LINE);
     }
 
-    public void showTaskcount(TaskList tasklist) {
+    public void showTaskCount(TaskList tasklist) {
         System.out.println(tasklist.toString());
         System.out.println("\n" + STRAIGHT_LINE);
     }
