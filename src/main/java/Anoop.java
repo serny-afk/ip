@@ -29,88 +29,78 @@ public class Anoop {
         new Anoop(ui, loadedTasks, storage).run();
     }
 
-    // Use of ChatGPT for overall formatting of try-catch blocks, substring manipulation
-    // i.e. trim, substring methods, as well as overall class organization / design choice
-    // (e.g. where printing should be handled, etc.)
+    // Use of ChatGPT for formatting of try-catch blocks
+    // Use of ChatGPT for overall organization of classes / methods (design choice)
+    // (i.e. where printing should be handled, where inputs should be parsed)
 
     private void run() {
         this.ui.userWelcome();
 
         while (true) {
-            String command = this.ui.readCommand().trim(); // trim once at the start
+            String input = this.ui.readCommand().trim(); // trim once at the start
 
             try {
-                if (command.equalsIgnoreCase("bye")) {
+                String commandType = Parser.getCommandType(input);
+                String args = Parser.getArguments(input);
+
+                if (commandType.equals("bye")) {
                     this.ui.userGoodbye();
                     break;
 
-                } else if (command.equalsIgnoreCase("list")) {
+                } else if (commandType.equals("list")) {
                     this.ui.showTaskList(this.tasklist);
 
-                } else if (command.toLowerCase().startsWith("mark ")) {
-                    int index = Integer.parseInt(command.substring(5).trim()) - 1;
+                } else if (commandType.startsWith("mark")) {
+                    int index = Parser.parseIndex(args);
                     Task task = this.tasklist.getTask(index);
                     task.markAsDone();
                     this.saveTasks();
                     this.ui.showMarkedTask(task);
 
-                } else if (command.toLowerCase().startsWith("unmark ")) {
-                    int index = Integer.parseInt(command.substring(7).trim()) - 1;
+                } else if (commandType.startsWith("unmark")) {
+                    int index = Parser.parseIndex(args);
                     Task task = this.tasklist.getTask(index);
                     task.markAsUndone();
                     this.saveTasks();
                     this.ui.showUnmarkedTask(task);
 
-                } else if (command.toLowerCase().startsWith("delete ")) {
-                    String arg = command.substring(7).trim();
-                    if (arg.isEmpty()) {
-                        throw new InvalidTaskNumberException();
-                    }
-                    int index = Integer.parseInt(arg) - 1;
+                } else if (commandType.startsWith("delete")) {
+                    int index = Parser.parseIndex(args);
                     Task removedTask = this.tasklist.getTask(index);
                     this.tasklist.deleteTask(index);
                     this.saveTasks();
                     this.ui.showDeletedTask(removedTask, this.tasklist);
 
-                } else if (command.toLowerCase().startsWith("todo")) {
-                    String description = command.substring(4).trim();
-                    if (description.isEmpty()) throw new EmptyDescriptionException("todo");
-
-                    Task todo = new ToDo(description);
+                } else if (commandType.startsWith("todo")) {
+                    if (args.isEmpty()) throw new EmptyDescriptionException("todo");
+                    Task todo = new ToDo(args);
                     this.tasklist.addTask(todo);
                     this.saveTasks();
                     this.ui.showAddedTask(todo);
                     this.ui.showTaskCount(this.tasklist);
 
-                } else if (command.toLowerCase().startsWith("deadline")) {
-                    String content = command.substring(8).trim();
-                    if (!content.contains(" /by ")) throw new MissingByException();
-
-                    String[] parts = content.split(" /by ", 2);
-                    String description = parts[0].trim();
-                    String by = parts[1].trim();
+                } else if (commandType.startsWith("deadline")) {
+                    String[] parts = Parser.parseDeadline(args);
+                    String description = parts[0];
+                    String by = parts[1];
                     if (description.isEmpty()) throw new EmptyDescriptionException("deadline");
 
                     LocalDateTime deadlineTime = DateTimeParser.parse(by);
-
                     Task deadline = new Deadline(description, deadlineTime);
+
                     this.tasklist.addTask(deadline);
                     this.saveTasks();
                     this.ui.showAddedTask(deadline);
                     this.ui.showTaskCount(this.tasklist);
 
-                } else if (command.toLowerCase().startsWith("event")) {
-                    String content = command.substring(5).trim();
-                    if (!content.contains(" /from ") || !content.contains(" /to ")) throw new MissingFromToException();
-
-                    String[] parts = content.split(" /from ", 2);
-                    String description = parts[0].trim();
+                } else if (commandType.startsWith("event")) {
+                    String[] parts = Parser.parseEvent(args);
+                    String description = parts[0];
+                    String from = parts[1];
+                    String to = parts[2];
                     if (description.isEmpty()) throw new EmptyDescriptionException("event");
 
-                    String[] times = parts[1].split(" /to ", 2);
-                    String from = times[0].trim();
                     LocalDateTime fromTime = DateTimeParser.parse(from);
-                    String to = times[1].trim();
                     LocalDateTime toTime = DateTimeParser.parse(to);
 
                     Task event = new Event(description, fromTime, toTime);
@@ -125,10 +115,6 @@ public class Anoop {
 
             } catch (AnoopException e) {
                 this.ui.showError(e.getMessage());
-            } catch (NumberFormatException e) {
-                this.ui.showError("Task number must be an integer.");
-            } catch (Exception e) {
-                this.ui.showError("Something went wrong: " + e.getMessage());
             }
         }
     }

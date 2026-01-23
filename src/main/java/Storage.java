@@ -14,7 +14,9 @@ public class Storage {
         this.filePath = Paths.get(filePath);
     }
 
-    // load text file as list of tasks
+    // Use of ChatGPT for File/Path methods used
+    // Use of ChatGPT for LocalDateTime methods
+   
     public TaskList load() throws IOException {
         checkFileExists();
 
@@ -33,7 +35,6 @@ public class Storage {
     }
 
     public void save(ArrayList<Task> taskList) throws IOException {
-        //TO-DO
         checkFileExists();
 
         try (FileWriter writer = new FileWriter(filePath.toFile())) {
@@ -56,7 +57,6 @@ public class Storage {
     }
 
     private Task parseTask(String line) {
-        // TO-DO return task based on text read
         if (line.length() < 6) {
             return null;
         }
@@ -70,7 +70,6 @@ public class Storage {
         if (parenIndex != -1) {
             description = line.substring(6, parenIndex).trim();
             extra = line.substring(parenIndex + 1, line.length() - 1).trim();
-            // extract content inside of parentheses
         } else {
             description = line.substring(6).trim();
         }
