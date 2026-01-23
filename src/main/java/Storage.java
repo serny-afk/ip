@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.nio.file.Files;
@@ -83,11 +84,16 @@ public class Storage {
 
         } else if (type == 'D') {
             if (extra != null && extra.startsWith("by: ")) {
-                Deadline deadline = new Deadline(description, extra.substring(4).trim());
-                if (isDone) {
-                    deadline.markAsDone();
+                try {
+                    LocalDateTime deadlineTime = DateTimeParser.parse(extra.substring(4).trim());
+                    Deadline deadline = new Deadline(description, deadlineTime);
+                    if (isDone) {
+                        deadline.markAsDone();
+                    }
+                    return deadline;
+                } catch (AnoopException e){
+                    System.err.println("Failed to parse deadline");
                 }
-                return deadline;
             }
             return null;
 
@@ -95,11 +101,17 @@ public class Storage {
             if (extra != null && extra.startsWith("from: ")) {
                 String[] parts = extra.substring(6).split(" to: ");
                 if (parts.length == 2) {
-                    Event event = new Event(description, parts[0].trim(), parts[1].trim());
-                    if (isDone) {
-                        event.markAsDone();
+                    try {
+                        LocalDateTime fromTime = DateTimeParser.parse(parts[0].trim());
+                        LocalDateTime toTime = DateTimeParser.parse(parts[1].trim());
+                        Event event = new Event(description, fromTime, toTime);
+                        if (isDone) {
+                            event.markAsDone();
+                        }
+                        return event;
+                    } catch (AnoopException e) {
+                        System.err.println("Failed to parse from / to time");
                     }
-                    return event;
                 }
                 return null;
             }
