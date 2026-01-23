@@ -1,4 +1,8 @@
+package chatbot.ui;
+
 import java.util.Scanner;
+import chatbot.task.*;
+import chatbot.exception.InvalidTaskNumberException;
 
 public class Ui {
     private static final String STRAIGHT_LINE = "____________________________________________________________";
@@ -8,7 +12,7 @@ public class Ui {
 
     public void userWelcome() {
         System.out.println(STRAIGHT_LINE);
-        System.out.println("\nHello, I'm Anoop. I'm taking 48 MCs this sem.");
+        System.out.println("\nHello, I'm chatbot.Anoop. I'm taking 48 MCs this sem.");
         System.out.println("\nWhat can I do for you?\n");
         System.out.println(STRAIGHT_LINE);
     }
