@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Anoop {
@@ -89,7 +91,9 @@ public class Anoop {
                     String by = parts[1].trim();
                     if (description.isEmpty()) throw new EmptyDescriptionException("deadline");
 
-                    Task deadline = new Deadline(description, by);
+                    LocalDateTime deadlineTime = DateTimeParser.parse(by);
+
+                    Task deadline = new Deadline(description, deadlineTime);
                     this.tasklist.addTask(deadline);
                     this.saveTasks();
                     this.ui.showAddedTask(deadline);
@@ -105,9 +109,11 @@ public class Anoop {
 
                     String[] times = parts[1].split(" /to ", 2);
                     String from = times[0].trim();
+                    LocalDateTime fromTime = DateTimeParser.parse(from);
                     String to = times[1].trim();
+                    LocalDateTime toTime = DateTimeParser.parse(to);
 
-                    Task event = new Event(description, from, to);
+                    Task event = new Event(description, fromTime, toTime);
                     this.tasklist.addTask(event);
                     this.saveTasks();
                     this.ui.showAddedTask(event);
