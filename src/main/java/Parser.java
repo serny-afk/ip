@@ -1,6 +1,7 @@
 public class Parser {
 
-    // takes in entire command string
+    // Use of ChatGPT for substring manipulation
+    // (i.e. trim, substring methods, indexing)
 
     public static String getCommandType(String input) {
         int spaceIndex = input.indexOf(" ");
