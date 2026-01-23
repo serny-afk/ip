@@ -23,14 +23,13 @@ public class Parser {
         return input.substring(spaceIndex + 1).trim();
     }
 
-
     public static String[] parseDeadline(String args) throws MissingByException {
         if (!args.contains(" /by ")) {
             throw new MissingByException();
         }
         String[] parts = args.split(" /by ", 2);
-        String description = parts[0];
-        String time = parts[1];
+        String description = parts[0].trim();
+        String time = parts[1].trim();
 
         return new String[]{description, time};
     }
