@@ -1,5 +1,7 @@
+package chatbot.exception;
+
 public class TaskListFullException extends AnoopException {
     public TaskListFullException() {
-        super("Task list is full. Cannot add more tasks.");
+        super("chatbot.task.Task list is full. Cannot add more tasks.");
     }
 }
