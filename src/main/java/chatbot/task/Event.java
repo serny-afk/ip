@@ -3,6 +3,9 @@ package chatbot.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a task that occurs over a specific time interval.
+ */
 public class Event extends Task {
 
     private final LocalDateTime from;
@@ -10,7 +13,6 @@ public class Event extends Task {
 
     private static final DateTimeFormatter OUTPUT_FORMAT =
             DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-
 
     public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
