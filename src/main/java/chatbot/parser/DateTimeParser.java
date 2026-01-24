@@ -1,6 +1,5 @@
 package chatbot.parser;
 
-import chatbot.exception.AnoopException;
 import chatbot.exception.InvalidDateTimeException;
 
 import java.time.LocalDateTime;

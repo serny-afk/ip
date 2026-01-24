@@ -50,7 +50,8 @@ public class Parser {
 
     public static int parseIndex(String arg) throws InvalidTaskNumberException {
         try {
-            return Integer.parseInt(arg.trim()) - 1; // 1 - indexed by chatgpt
+            // Convert 1-indexed input to 0-indexed
+            return Integer.parseInt(arg.trim()) - 1;
         } catch (NumberFormatException e) {
             throw new InvalidTaskNumberException();
         }
