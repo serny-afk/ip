@@ -4,11 +4,22 @@ import chatbot.exception.InvalidTaskNumberException;
 import chatbot.exception.MissingByException;
 import chatbot.exception.MissingFromToException;
 
+// Use of ChatGPT for phrasing of JavaDoc documentation
+
+/**
+ * Parses user input strings into command components and arguments
+ * required by the chatbot logic.
+ * This class provides helper methods to extract command types,
+ * arguments, and structured task information from raw user input.
+ */
 public class Parser {
 
-    // Use of ChatGPT for substring manipulation
-    // (i.e. trim, substring methods, indexing)
-
+    /**
+     * Extracts the command keyword from the user input.
+     *
+     * @param input Full user input string.
+     * @return The command keyword in lowercase.
+     */
     public static String getCommandType(String input) {
         int spaceIndex = input.indexOf(" ");
         if (spaceIndex == -1) {
@@ -17,12 +28,25 @@ public class Parser {
         return input.substring(0, spaceIndex).toLowerCase();
     }
 
-    // returns everything after the command type
+    /**
+     * Extracts the arguments portion of the user input
+     * (everything after the command keyword).
+     *
+     * @param input Full user input string.
+     * @return Arguments string with leading and trailing whitespace removed.
+     */
     public static String getArguments(String input) {
         int spaceIndex = input.indexOf(" ");
         return input.substring(spaceIndex + 1).trim();
     }
 
+    /**
+     * Parses arguments for a deadline task.
+     *
+     * @param args Argument string containing task description and deadline.
+     * @return A string array containing the task description and deadline time.
+     * @throws MissingByException If the "/by" keyword is missing.
+     */
     public static String[] parseDeadline(String args) throws MissingByException {
         if (!args.contains(" /by ")) {
             throw new MissingByException();
@@ -34,6 +58,13 @@ public class Parser {
         return new String[]{description, time};
     }
 
+    /**
+     * Parses arguments for an event task.
+     *
+     * @param args Argument string containing task description, start time, and end time.
+     * @return A string array containing the task description, start time, and end time.
+     * @throws MissingFromToException If either "/from" or "/to" keyword is missing.
+     */
     public static String[] parseEvent(String args) throws MissingFromToException {
         if (!args.contains(" /from ") || !args.contains(" /to ")) {
             throw new MissingFromToException();
@@ -48,9 +79,16 @@ public class Parser {
         return new String[]{description, from, to};
     }
 
+    /**
+     * Parses a task index from user input.
+     *
+     * @param arg String representing a 1-indexed task number.
+     * @return Zero-indexed task number.
+     * @throws InvalidTaskNumberException If the input is not a valid number.
+     */
     public static int parseIndex(String arg) throws InvalidTaskNumberException {
         try {
-            return Integer.parseInt(arg.trim()) - 1; // 1 - indexed by chatgpt
+            return Integer.parseInt(arg.trim()) - 1;
         } catch (NumberFormatException e) {
             throw new InvalidTaskNumberException();
         }

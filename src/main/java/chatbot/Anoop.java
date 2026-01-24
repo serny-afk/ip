@@ -38,6 +38,7 @@ public class Anoop {
     // Use of ChatGPT for formatting of try-catch blocks
     // Use of ChatGPT for overall organization of classes / methods (design choice)
     // (i.e. where printing should be handled, where inputs should be parsed)
+    // Use of ChatGPT for phrasing of JavaDoc documentation
 
     private void run() {
         this.ui.userWelcome();
