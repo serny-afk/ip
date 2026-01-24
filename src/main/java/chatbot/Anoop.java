@@ -7,6 +7,7 @@ import chatbot.task.*;
 import chatbot.exception.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Anoop {
 
@@ -115,6 +116,14 @@ public class Anoop {
                     this.saveTasks();
                     this.ui.showAddedTask(event);
                     this.ui.showTaskCount(this.tasklist);
+
+                } else if (commandType.equals("find")) {
+                    if (args.isEmpty()) {
+                        throw new EmptyDescriptionException("find");
+                    }
+
+                    ArrayList<Task> foundTasks = this.tasklist.findTasks(args);
+                    this.ui.showMatchingTasks(foundTasks);
 
                 } else {
                     throw new UnknownCommandException();
