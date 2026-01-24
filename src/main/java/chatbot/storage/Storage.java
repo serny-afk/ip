@@ -13,16 +13,29 @@ import java.nio.file.Paths;
 import java.io.IOException;
 import java.io.FileWriter;
 
+/**
+ * Handles loading tasks from and saving tasks to a local file.
+ * Tasks are stored in a text file and reconstructed into their
+ * respective task types when loaded.
+ */
 public class Storage {
     private final Path filePath;
 
+    /**
+     * Creates a Storage object using the specified file path.
+     *
+     * @param filePath Path to the file used for saving and loading tasks.
+     */
     public Storage(String filePath) {
         this.filePath = Paths.get(filePath);
     }
 
-    // Use of ChatGPT for File/Path methods used
-    // Use of ChatGPT for LocalDateTime methods
-   
+    /**
+     * Loads tasks from the storage file.
+     *
+     * @return A TaskList containing all successfully loaded tasks.
+     * @throws IOException If an error occurs while accessing the file.
+     */
     public TaskList load() throws IOException {
         checkFileExists();
 
@@ -40,6 +53,12 @@ public class Storage {
         return new TaskList(tasks);
     }
 
+    /**
+     * Saves the given list of tasks to the storage file.
+     *
+     * @param taskList List of tasks to be saved.
+     * @throws IOException If an error occurs while writing to the file.
+     */
     public void save(ArrayList<Task> taskList) throws IOException {
         checkFileExists();
 
@@ -50,9 +69,13 @@ public class Storage {
         }
     }
 
+    /**
+     * Ensures that the storage file and its parent directories exist.
+     *
+     * @throws IOException If directories or file cannot be created.
+     */
     private void checkFileExists() throws IOException {
         Path parent = filePath.getParent();
-        // second check !Files.exists(parent) suggested by chatgpt
         if (parent != null && !Files.exists(parent)) {
             Files.createDirectories(parent);
         }
@@ -62,15 +85,21 @@ public class Storage {
         }
     }
 
+    /**
+     * Parses a single line from the storage file into a Task object.
+     *
+     * @param line A line representing a stored task.
+     * @return The corresponding Task object, or {@code null} if parsing fails.
+     */
     private Task parseTask(String line) {
         if (line.length() < 6) {
             return null;
         }
 
-        char type = line.charAt(1); // check T/D/E
+        char type = line.charAt(1);
         boolean isDone = line.charAt(4) == 'X';
         String description;
-        String extra = null; // extra info within parentheses
+        String extra = null;
 
         int parenIndex = line.indexOf('(');
         if (parenIndex != -1) {
@@ -90,13 +119,14 @@ public class Storage {
         } else if (type == 'D') {
             if (extra != null && extra.startsWith("by: ")) {
                 try {
-                    LocalDateTime deadlineTime = DateTimeParser.parse(extra.substring(4).trim());
+                    LocalDateTime deadlineTime =
+                            DateTimeParser.parse(extra.substring(4).trim());
                     Deadline deadline = new Deadline(description, deadlineTime);
                     if (isDone) {
                         deadline.markAsDone();
                     }
                     return deadline;
-                } catch (AnoopException e){
+                } catch (AnoopException e) {
                     System.err.println("Failed to parse deadline");
                 }
             }
@@ -107,8 +137,10 @@ public class Storage {
                 String[] parts = extra.substring(6).split(" to: ");
                 if (parts.length == 2) {
                     try {
-                        LocalDateTime fromTime = DateTimeParser.parse(parts[0].trim());
-                        LocalDateTime toTime = DateTimeParser.parse(parts[1].trim());
+                        LocalDateTime fromTime =
+                                DateTimeParser.parse(parts[0].trim());
+                        LocalDateTime toTime =
+                                DateTimeParser.parse(parts[1].trim());
                         Event event = new Event(description, fromTime, toTime);
                         if (isDone) {
                             event.markAsDone();
@@ -118,10 +150,8 @@ public class Storage {
                         System.err.println("Failed to parse from / to time");
                     }
                 }
-                return null;
             }
         }
         return null;
     }
-
 }
