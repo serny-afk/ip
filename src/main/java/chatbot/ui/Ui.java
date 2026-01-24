@@ -1,6 +1,8 @@
 package chatbot.ui;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+
 import chatbot.task.*;
 import chatbot.exception.InvalidTaskNumberException;
 
@@ -83,6 +85,19 @@ public class Ui {
         System.out.println("Noted. I've removed this task:\n  " + task.toString());
         System.out.println(tasklist.toString());
         System.out.println("\n" + STRAIGHT_LINE);
+    }
+
+    public void showMatchingTasks(ArrayList<Task> matchingTasks) {
+        System.out.println("\n" + STRAIGHT_LINE);
+        if (matchingTasks.isEmpty()) {
+            System.out.println("No matching tasks found.");
+        } else {
+            System.out.println("Here are the matching tasks found:\n");
+            for (int i = 0; i < matchingTasks.size(); i++) {
+                System.out.println((i + 1) + ". " + matchingTasks.get(i).toString());
+            }
+        }
+        System.out.println(STRAIGHT_LINE + "\n");
     }
 
 }

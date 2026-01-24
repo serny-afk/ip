@@ -41,6 +41,18 @@ public class TaskList {
         return new ArrayList<>(this.tasks);
     }
 
+    public ArrayList<Task> findTasks(String query) {
+        ArrayList<Task> matches = new ArrayList<>();
+        String keyword = query.toLowerCase();
+
+        for (Task task : this.tasks) {
+            if (task.getDescription().toLowerCase().contains(keyword)) {
+                matches.add(task);
+            }
+        }
+        return matches;
+    }
+
     @Override
     public String toString() {
         return "Now you have " + this.tasks.size() + " tasks in the list.";
