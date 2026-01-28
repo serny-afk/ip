@@ -1,8 +1,8 @@
 package chatbot.task;
 
-import chatbot.exception.InvalidTaskNumberException;
-
 import java.util.ArrayList;
+
+import chatbot.exception.InvalidTaskNumberException;
 
 /**
  * Represents a list of tasks in the chatbot application.
@@ -82,6 +82,12 @@ public class TaskList {
         return new ArrayList<>(this.tasks);
     }
 
+    /**
+     * Returns a list of tasks matching query
+     *
+     * @param query String input of queried task
+     * @return A new ArrayList with matching results
+     */
     public ArrayList<Task> findTasks(String query) {
         ArrayList<Task> matches = new ArrayList<>();
         String keyword = query.toLowerCase();

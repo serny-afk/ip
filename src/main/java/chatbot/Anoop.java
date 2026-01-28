@@ -1,20 +1,38 @@
 package chatbot;
-import chatbot.ui.Ui;
-import chatbot.parser.Parser;
-import chatbot.parser.DateTimeParser;
-import chatbot.storage.Storage;
-import chatbot.task.*;
-import chatbot.exception.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import chatbot.exception.AnoopException;
+import chatbot.exception.EmptyDescriptionException;
+import chatbot.exception.UnknownCommandException;
+import chatbot.parser.DateTimeParser;
+import chatbot.parser.Parser;
+import chatbot.storage.Storage;
+import chatbot.task.Deadline;
+import chatbot.task.Event;
+import chatbot.task.Task;
+import chatbot.task.TaskList;
+import chatbot.task.ToDo;
+import chatbot.ui.Ui;
+/**
+ * Main controller of the chatbot application
+ * Handles user input, manages tasks, coordinates between
+ * the UI, task storage and task list
+ */
 public class Anoop {
 
     private final Ui ui;
     private final TaskList tasklist;
     private final Storage storage;
 
+    /**
+     * Creates a new chatbot instance with the given components
+     *
+     * @param ui the user interface to interact with
+     * @param tasklist object containing list of tasks
+     * @param storage handler for data persistence of tasks in list
+     */
     public Anoop(Ui ui, TaskList tasklist, Storage storage) {
         this.ui = ui;
         this.tasklist = tasklist;
@@ -23,7 +41,7 @@ public class Anoop {
 
     public static void main(String[] args) {
         Ui ui = new Ui();
-        Storage storage =  new Storage("./data/chatbot.Anoop.txt");
+        Storage storage = new Storage("./data/chatbot.Anoop.txt");
 
         TaskList loadedTasks = new TaskList();
 
@@ -80,7 +98,9 @@ public class Anoop {
                     this.ui.showDeletedTask(removedTask, this.tasklist);
 
                 } else if (commandType.startsWith("todo")) {
-                    if (args.isEmpty()) throw new EmptyDescriptionException("todo");
+                    if (args.isEmpty()) {
+                        throw new EmptyDescriptionException("todo");
+                    }
                     Task todo = new ToDo(args);
                     this.tasklist.addTask(todo);
                     this.saveTasks();
@@ -91,7 +111,9 @@ public class Anoop {
                     String[] parts = Parser.parseDeadline(args);
                     String description = parts[0];
                     String by = parts[1];
-                    if (description.isEmpty()) throw new EmptyDescriptionException("deadline");
+                    if (description.isEmpty()) {
+                        throw new EmptyDescriptionException("deadline");
+                    }
 
                     LocalDateTime deadlineTime = DateTimeParser.parse(by);
                     Task deadline = new Deadline(description, deadlineTime);
@@ -106,7 +128,9 @@ public class Anoop {
                     String description = parts[0];
                     String from = parts[1];
                     String to = parts[2];
-                    if (description.isEmpty()) throw new EmptyDescriptionException("event");
+                    if (description.isEmpty()) {
+                        throw new EmptyDescriptionException("event");
+                    }
 
                     LocalDateTime fromTime = DateTimeParser.parse(from);
                     LocalDateTime toTime = DateTimeParser.parse(to);
