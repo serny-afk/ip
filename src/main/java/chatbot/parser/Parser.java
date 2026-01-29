@@ -1,7 +1,5 @@
 package chatbot.parser;
 
-// Use of ChatGPT for phrasing of JavaDoc documentation
-
 import chatbot.command.AddCommand;
 import chatbot.command.Command;
 import chatbot.command.DeleteCommand;
@@ -19,22 +17,20 @@ import chatbot.task.ToDo;
 /**
  * Parses user input strings into command components and arguments
  * required by the chatbot logic.
- * This class provides helper methods to extract command types,
- * arguments, and structured task information from raw user input.
  */
 public class Parser {
 
-    // ChatGPT recommendation to use '->' instead of ': and break'
-    // ChatGPT provided methods for string manipulation
-
     /**
-     * Extracts the command keyword from the user input.
-     *
-     * @param input Full user input string.
-     * @return The command keyword in lowercase.
+     * Parses full user input into a Command object.
+     * @param input full user input
+     * @return Command object
+     * @throws AnoopException if input is empty or invalid
      */
     public static Command parse(String input) throws AnoopException {
-        // Method provided by ChatGPT
+        if (input == null || input.trim().isEmpty()) {
+            throw new AnoopException("Please enter a command.");
+        }
+
         String[] parts = input.trim().split("\\s+", 2);
         String commandType = parts[0].toLowerCase();
         String args = (parts.length == 2) ? parts[1] : "";
@@ -50,111 +46,128 @@ public class Parser {
         case "deadline" -> c = new AddCommand(parseDeadline(args));
         case "event" -> c = new AddCommand(parseEvent(args));
         case "find" -> c = new FindCommand(args);
-        default -> throw new AnoopException("Error. Command not found");
+        default -> throw new AnoopException("Command not found");
         }
-
         return c;
     }
 
     /**
-     * Extracts the arguments portion of the user input
-     * (everything after the command keyword).
-     *
-     * @param input Full user input string.
-     * @return Arguments string with leading and trailing whitespace removed.
+     * Extracts the argument portion of input (after the command keyword).
+     * @param input full user input
+     * @return trimmed argument string
      */
     public static String getArguments(String input) {
         int spaceIndex = input.indexOf(" ");
+        if (spaceIndex == -1) {
+            return "";
+        }
         return input.substring(spaceIndex + 1).trim();
     }
 
     /**
      * TODO add javadoc
-     * @param args 1
-     * @return task
-     * @throws AnoopException exception
+     * @param args
+     * @return
+     * @throws AnoopException
      */
+
     public static Task parseToDo(String args) throws AnoopException {
         if (args.isEmpty()) {
-            throw new AnoopException("Error. Description cannot be empty.");
+            throw new AnoopException("Description cannot be empty.");
         }
         return new ToDo(args);
     }
 
     /**
      * TODO add javadoc
-     * @param args 1
-     * @return task
-     * @throws AnoopException exception
+     * @param args
+     * @return
+     * @throws AnoopException
      */
+
     public static Task parseDeadline(String args) throws AnoopException {
         if (args.isEmpty()) {
             throw new AnoopException("Description cannot be empty.");
         }
+
         String[] parts = args.split("\\s+/by\\s+", 2);
+        if (parts.length < 2) {
+            throw new AnoopException("Usage: deadline <description> /by <time>");
+        }
+
         String description = parts[0].trim();
         String time = parts[1].trim();
-        return new Deadline(description, DateTimeParser.parse(time));
+        if (description.isEmpty()) {
+            throw new AnoopException("Description cannot be empty.");
+        }
+        if (time.isEmpty()) {
+            throw new AnoopException("/by time cannot be empty.");
+        }
+
+        try {
+            return new Deadline(description, DateTimeParser.parse(time));
+        } catch (Exception e) {
+            throw new AnoopException("Invalid date/time format. Use dd-MM-yyyy HH:mm");
+        }
     }
 
     /**
      * TODO add javadoc
-     * @param args 1
-     * @return task
-     * @throws AnoopException exception
+     * @param args
+     * @return
+     * @throws AnoopException
      */
+
     public static Task parseEvent(String args) throws AnoopException {
         if (args.isEmpty()) {
             throw new AnoopException("Usage: event <description> /from <from> /to <to>");
         }
-        String[] firstSplit = args.split("\\s+/by\\s+", 2);
+
+        String[] firstSplit = args.split("\\s+/from\\s+", 2);
         if (firstSplit.length < 2) {
-            throw new AnoopException("Error. Usage: event <description> /from <from> /to <to>");
+            throw new AnoopException("Usage: event <description> /from <from> /to <to>");
         }
 
         String description = firstSplit[0].trim();
         String rest = firstSplit[1].trim();
 
-        if (description.isEmpty()) {
-            throw new AnoopException("Error. Description cannot be empty.");
-        }
-
-        String[] secondSplit = args.split("\\s+/by\\s+", 2);
+        String[] secondSplit = rest.split("\\s+/to\\s+", 2);
         if (secondSplit.length < 2) {
-            throw new AnoopException("Error. Usage: event <description> /from <from> /to <to>.");
+            throw new AnoopException("Usage: event <description> /from <from> /to <to>");
         }
 
         String from = secondSplit[0].trim();
         String to = secondSplit[1].trim();
-
-        if (from.isEmpty() || to.isEmpty()) {
-            throw new AnoopException("Error. Event must have /from and /to.");
+        if (description.isEmpty() || from.isEmpty() || to.isEmpty()) {
+            throw new AnoopException("Event must have description, /from, and /to.");
         }
 
-        return new Event(description, DateTimeParser.parse(from), DateTimeParser.parse(to));
+        try {
+            return new Event(description, DateTimeParser.parse(from), DateTimeParser.parse(to));
+        } catch (Exception e) {
+            throw new AnoopException("Invalid date/time format. Use dd-MM-yyyy HH:mm");
+        }
     }
 
     /**
      * TODO add javadoc
-     * @param args string
-     * @return int
-     * @throws AnoopException exception
+     * @param args
+     * @return
+     * @throws AnoopException
      */
+
     public static int parseIndex(String args) throws AnoopException {
         if (args == null || args.trim().isEmpty()) {
             throw new AnoopException("Task number cannot be empty");
         }
 
-        // Split into tokens by whitespace
         String[] parts = args.trim().split("\\s+");
-
-        // Must be exactly one token
         if (parts.length != 1) {
             throw new AnoopException("Usage: <command> <taskNumber>");
         }
 
         try {
-            int index = Integer.parseInt(parts[0]) - 1; // convert to 0-based
+            int index = Integer.parseInt(parts[0]) - 1;
             if (index < 0) {
                 throw new AnoopException("Error. Task number not valid.");
             }
@@ -163,6 +176,4 @@ public class Parser {
             throw new AnoopException("Error. Task number must be a number.");
         }
     }
-
 }
-

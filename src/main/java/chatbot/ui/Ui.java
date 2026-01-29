@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import chatbot.exception.AnoopException;
-import chatbot.task.*;
+import chatbot.task.Task;
+import chatbot.task.TaskList;
 
 /**
  * Handles interaction with the user through the command line.
@@ -143,7 +144,6 @@ public class Ui {
      * TODO add javadoc
      * @param matchingTasks show tasks
      */
-
     public void showMatchingTasks(ArrayList<Task> matchingTasks) {
         System.out.println("\n" + STRAIGHT_LINE);
         if (matchingTasks.isEmpty()) {
