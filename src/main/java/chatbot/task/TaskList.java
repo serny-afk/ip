@@ -2,7 +2,7 @@ package chatbot.task;
 
 import java.util.ArrayList;
 
-import chatbot.exception.InvalidTaskNumberException;
+import chatbot.exception.AnoopException;
 
 /**
  * Represents a list of tasks in the chatbot application.
@@ -51,26 +51,23 @@ public class TaskList {
      *
      * @param index Index of the task to retrieve (0-based).
      * @return The Task object at the given index.
-     * @throws InvalidTaskNumberException If the index is out of bounds.
+     * @throws AnoopException If the index is out of bounds.
      */
-    public Task getTask(int index) throws InvalidTaskNumberException {
-        if (index < 0 || index >= tasks.size()) {
-            throw new InvalidTaskNumberException();
-        }
+    public Task getTask(int index) throws AnoopException {
+        checkIndexValid(index);
         return this.tasks.get(index);
     }
 
     /**
-     * Deletes the task at the specified index.
-     *
-     * @param index Index of the task to delete (0-based).
-     * @throws InvalidTaskNumberException If the index is out of bounds.
+     * TODO add javadoc
+     * @param index TODO
+     * @throws AnoopException TODO
      */
-    public void deleteTask(int index) throws InvalidTaskNumberException {
-        if (index < 0 || index >= tasks.size()) {
-            throw new InvalidTaskNumberException();
-        }
+    public Task deleteTask(int index) throws AnoopException {
+        this.checkIndexValid(index);
+        Task t = this.getTask(index);
         this.tasks.remove(index);
+        return t;
     }
 
     /**
@@ -98,6 +95,38 @@ public class TaskList {
             }
         }
         return matches;
+    }
+
+    /**
+     * TODO javadoc
+     * @param index 1
+     * @return task
+     * @throws AnoopException exception
+     */
+    public Task markTask(int index) throws AnoopException {
+        checkIndexValid(index);
+        Task t = tasks.get(index);
+        t.markAsDone();
+        return t;
+    }
+
+    /**
+     * TODO javadoc
+     * @param index 1
+     * @return task
+     * @throws AnoopException Exception
+     */
+    public Task unmarkTask(int index) throws AnoopException {
+        checkIndexValid(index);
+        Task t = tasks.get(index);
+        t.markAsUndone();
+        return t;
+    }
+
+    private void checkIndexValid(int index) throws AnoopException {
+        if (index < 0 || index >= tasks.size()) {
+            throw new AnoopException("index out of bounds");
+        }
     }
 
     /**

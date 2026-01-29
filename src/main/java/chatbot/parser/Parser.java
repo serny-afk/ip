@@ -1,10 +1,20 @@
 package chatbot.parser;
 
-import chatbot.exception.InvalidTaskNumberException;
-import chatbot.exception.MissingByException;
-import chatbot.exception.MissingFromToException;
-
 // Use of ChatGPT for phrasing of JavaDoc documentation
+
+import chatbot.command.AddCommand;
+import chatbot.command.Command;
+import chatbot.command.DeleteCommand;
+import chatbot.command.ExitCommand;
+import chatbot.command.FindCommand;
+import chatbot.command.ListCommand;
+import chatbot.command.MarkCommand;
+import chatbot.command.UnmarkCommand;
+import chatbot.exception.AnoopException;
+import chatbot.task.Deadline;
+import chatbot.task.Event;
+import chatbot.task.Task;
+import chatbot.task.ToDo;
 
 /**
  * Parses user input strings into command components and arguments
@@ -14,18 +24,36 @@ import chatbot.exception.MissingFromToException;
  */
 public class Parser {
 
+    // ChatGPT recommendation to use '->' instead of ': and break'
+    // ChatGPT provided methods for string manipulation
+
     /**
      * Extracts the command keyword from the user input.
      *
      * @param input Full user input string.
      * @return The command keyword in lowercase.
      */
-    public static String getCommandType(String input) {
-        int spaceIndex = input.indexOf(" ");
-        if (spaceIndex == -1) {
-            return input.toLowerCase();
+    public static Command parse(String input) throws AnoopException {
+        // Method provided by ChatGPT
+        String[] parts = input.trim().split("\\s+", 2);
+        String commandType = parts[0].toLowerCase();
+        String args = (parts.length == 2) ? parts[1] : "";
+
+        Command c;
+        switch(commandType) {
+        case "bye" -> c = new ExitCommand();
+        case "list" -> c = new ListCommand();
+        case "mark" -> c = new MarkCommand(parseIndex(args));
+        case "unmark" -> c = new UnmarkCommand(parseIndex(args));
+        case "delete" -> c = new DeleteCommand(parseIndex(args));
+        case "todo" -> c = new AddCommand(parseToDo(args));
+        case "deadline" -> c = new AddCommand(parseDeadline(args));
+        case "event" -> c = new AddCommand(parseEvent(args));
+        case "find" -> c = new FindCommand(args);
+        default -> throw new AnoopException("Error. Command not found");
         }
-        return input.substring(0, spaceIndex).toLowerCase();
+
+        return c;
     }
 
     /**
@@ -41,56 +69,100 @@ public class Parser {
     }
 
     /**
-     * Parses arguments for a deadline task.
-     *
-     * @param args Argument string containing task description and deadline.
-     * @return A string array containing the task description and deadline time.
-     * @throws MissingByException If the "/by" keyword is missing.
+     * TODO add javadoc
+     * @param args 1
+     * @return task
+     * @throws AnoopException exception
      */
-    public static String[] parseDeadline(String args) throws MissingByException {
-        if (!args.contains(" /by ")) {
-            throw new MissingByException();
+    public static Task parseToDo(String args) throws AnoopException {
+        if (args.isEmpty()) {
+            throw new AnoopException("Error. Description cannot be empty.");
         }
-        String[] parts = args.split(" /by ", 2);
-        String description = parts[0].trim();
-        String time = parts[1].trim();
-
-        return new String[]{description, time};
+        return new ToDo(args);
     }
 
     /**
-     * Parses arguments for an event task.
-     *
-     * @param args Argument string containing task description, start time, and end time.
-     * @return A string array containing the task description, start time, and end time.
-     * @throws MissingFromToException If either "/from" or "/to" keyword is missing.
+     * TODO add javadoc
+     * @param args 1
+     * @return task
+     * @throws AnoopException exception
      */
-    public static String[] parseEvent(String args) throws MissingFromToException {
-        if (!args.contains(" /from ") || !args.contains(" /to ")) {
-            throw new MissingFromToException();
+    public static Task parseDeadline(String args) throws AnoopException {
+        if (args.isEmpty()) {
+            throw new AnoopException("Description cannot be empty.");
         }
-        String[] firstSplit = args.split(" /from ", 2);
-        String description = firstSplit[0].trim();
+        String[] parts = args.split("\\s+/by\\s+", 2);
+        String description = parts[0].trim();
+        String time = parts[1].trim();
+        return new Deadline(description, DateTimeParser.parse(time));
+    }
 
-        String[] secondSplit = firstSplit[1].split(" /to ", 2);
+    /**
+     * TODO add javadoc
+     * @param args 1
+     * @return task
+     * @throws AnoopException exception
+     */
+    public static Task parseEvent(String args) throws AnoopException {
+        if (args.isEmpty()) {
+            throw new AnoopException("Usage: event <description> /from <from> /to <to>");
+        }
+        String[] firstSplit = args.split("\\s+/by\\s+", 2);
+        if (firstSplit.length < 2) {
+            throw new AnoopException("Error. Usage: event <description> /from <from> /to <to>");
+        }
+
+        String description = firstSplit[0].trim();
+        String rest = firstSplit[1].trim();
+
+        if (description.isEmpty()) {
+            throw new AnoopException("Error. Description cannot be empty.");
+        }
+
+        String[] secondSplit = args.split("\\s+/by\\s+", 2);
+        if (secondSplit.length < 2) {
+            throw new AnoopException("Error. Usage: event <description> /from <from> /to <to>.");
+        }
+
         String from = secondSplit[0].trim();
         String to = secondSplit[1].trim();
 
-        return new String[]{description, from, to};
+        if (from.isEmpty() || to.isEmpty()) {
+            throw new AnoopException("Error. Event must have /from and /to.");
+        }
+
+        return new Event(description, DateTimeParser.parse(from), DateTimeParser.parse(to));
     }
 
     /**
-     * Parses a task index from user input.
-     *
-     * @param arg String representing a 1-indexed task number.
-     * @return Zero-indexed task number.
-     * @throws InvalidTaskNumberException If the input is not a valid number.
+     * TODO add javadoc
+     * @param args string
+     * @return int
+     * @throws AnoopException exception
      */
-    public static int parseIndex(String arg) throws InvalidTaskNumberException {
+    public static int parseIndex(String args) throws AnoopException {
+        if (args == null || args.trim().isEmpty()) {
+            throw new AnoopException("Task number cannot be empty");
+        }
+
+        // Split into tokens by whitespace
+        String[] parts = args.trim().split("\\s+");
+
+        // Must be exactly one token
+        if (parts.length != 1) {
+            throw new AnoopException("Usage: <command> <taskNumber>");
+        }
+
         try {
-            return Integer.parseInt(arg.trim()) - 1;
+            int index = Integer.parseInt(parts[0]) - 1; // convert to 0-based
+            if (index < 0) {
+                throw new AnoopException("Error. Task number not valid.");
+            }
+            return index;
         } catch (NumberFormatException e) {
-            throw new InvalidTaskNumberException();
+            throw new AnoopException("Error. Task number must be a number.");
         }
     }
+
 }
+

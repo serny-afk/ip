@@ -2,8 +2,9 @@ package chatbot.ui;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import chatbot.exception.AnoopException;
 import chatbot.task.*;
-import chatbot.exception.InvalidTaskNumberException;
 
 /**
  * Handles interaction with the user through the command line.
@@ -64,7 +65,7 @@ public class Ui {
             for (int i = 0; i < tasklist.getSize(); i++) {
                 System.out.println((i + 1) + "." + tasklist.getTask(i).toString());
             }
-        } catch (InvalidTaskNumberException e) {
+        } catch (AnoopException e) {
             System.out.println(e.getMessage());
         }
         System.out.println("\n" + STRAIGHT_LINE);
@@ -137,6 +138,11 @@ public class Ui {
         System.out.println(tasklist.toString());
         System.out.println("\n" + STRAIGHT_LINE);
     }
+
+    /**
+     * TODO add javadoc
+     * @param matchingTasks show tasks
+     */
 
     public void showMatchingTasks(ArrayList<Task> matchingTasks) {
         System.out.println("\n" + STRAIGHT_LINE);

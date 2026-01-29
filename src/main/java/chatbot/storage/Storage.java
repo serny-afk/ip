@@ -31,8 +31,8 @@ public class Storage {
      *
      * @param filePath Path to the file used for saving and loading tasks.
      */
-    public Storage(String filePath) {
-        this.filePath = Paths.get(filePath);
+    public Storage(Path filePath) {
+        this.filePath = filePath;
     }
 
     /**
@@ -41,7 +41,7 @@ public class Storage {
      * @return A TaskList containing all successfully loaded tasks.
      * @throws IOException If an error occurs while accessing the file.
      */
-    public TaskList load() throws IOException {
+    public TaskList load() throws AnoopException {
         checkFileExists();
 
         ArrayList<Task> tasks = new ArrayList<>();
@@ -54,6 +54,8 @@ public class Storage {
                     tasks.add(task);
                 }
             }
+        } catch (IOException e) {
+            throw new AnoopException(e.getMessage());
         }
         return new TaskList(tasks);
     }
@@ -64,13 +66,15 @@ public class Storage {
      * @param taskList List of tasks to be saved.
      * @throws IOException If an error occurs while writing to the file.
      */
-    public void save(ArrayList<Task> taskList) throws IOException {
+    public void save(ArrayList<Task> taskList) throws AnoopException {
         checkFileExists();
 
         try (FileWriter writer = new FileWriter(filePath.toFile())) {
             for (Task task : taskList) {
                 writer.write(task.toString() + "\n");
             }
+        } catch (IOException e) {
+            throw new AnoopException(e.getMessage());
         }
     }
 
@@ -79,14 +83,18 @@ public class Storage {
      *
      * @throws IOException If directories or file cannot be created.
      */
-    private void checkFileExists() throws IOException {
-        Path parent = filePath.getParent();
-        if (parent != null && !Files.exists(parent)) {
-            Files.createDirectories(parent);
-        }
+    private void checkFileExists() throws AnoopException {
+        try {
+            Path parent = filePath.getParent();
+            if (parent != null && !Files.exists(parent)) {
+                Files.createDirectories(parent);
+            }
 
-        if (!Files.exists(filePath)) {
-            Files.createFile(filePath);
+            if (!Files.exists(filePath)) {
+                Files.createFile(filePath);
+            }
+        } catch (IOException e) {
+            throw new AnoopException(e.getMessage());
         }
     }
 
