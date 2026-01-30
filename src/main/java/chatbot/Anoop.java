@@ -10,6 +10,12 @@ import chatbot.storage.Storage;
 import chatbot.task.TaskList;
 import chatbot.ui.Ui;
 
+// --- AI & Code Reuse Declaration ---
+// ChatGPT use: Formatting of JavaDoc comments, JUnit tests, string manipulation methods
+// ChatGPT use: Debugging and formatting of program
+// Code reuse: Organization of classes and general design for reformatting code inspired by:
+// @omgeta and @lemonishi on CS2103T GitHub, JavaFX tutorial on CS2103T website
+
 /**
  * Main controller class for the Anoop chatbot application.
  * <p>
@@ -80,26 +86,21 @@ public class Anoop {
         while (!isExit) {
             try {
                 String input = ui.readCommand().trim();
-                Command cmd = Parser.parse(input);
-                cmd.execute(this.taskList, this.ui, this.storage);
-                isExit = cmd.isExit();
+                Command c = Parser.parse(input);
+                c.execute(this.taskList, this.ui, this.storage);
+                isExit = c.isExit();
             } catch (AnoopException e) {
                 ui.showError(e.getMessage());
             }
         }
     }
 
-    /**
-     * Saves the current task list to persistent storage.
-     * <p>
-     * If saving fails, an error message is displayed to the user.
-     */
-    private void saveTasks() {
+    public String getResponse(String input) {
         try {
-            this.storage.save(this.taskList.getTasks());
-        } catch (Exception e) {
-            this.ui.showError(e.getMessage());
+            Command c = Parser.parse(input.trim());
+            return c.execute(this.taskList, this.ui, this.storage);
+        } catch (AnoopException e) {
+            return e.getMessage();
         }
     }
-
 }

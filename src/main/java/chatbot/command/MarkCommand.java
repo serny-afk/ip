@@ -17,9 +17,9 @@ public class MarkCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws AnoopException {
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws AnoopException {
         Task t = tasks.markTask(this.index);
         storage.save(tasks.getTasks());
-        ui.showMarkedTask(t);
+        return ui.showMarkedTask(t);
     }
 }

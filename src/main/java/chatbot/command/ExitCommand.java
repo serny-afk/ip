@@ -10,8 +10,8 @@ import chatbot.ui.Ui;
 public class ExitCommand extends Command {
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        ui.userGoodbye();
+    public String execute(TaskList tasks, Ui ui, Storage storage) {
+        return ui.userGoodbye();
     }
 
     @Override

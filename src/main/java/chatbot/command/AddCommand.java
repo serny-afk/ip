@@ -18,10 +18,10 @@ public class AddCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws AnoopException {
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws AnoopException {
         tasks.addTask(this.taskToAdd);
         storage.save(tasks.getTasks());
-        ui.showAddedTask(this.taskToAdd);
+        return ui.showAddedTask(this.taskToAdd);
     }
 
 }

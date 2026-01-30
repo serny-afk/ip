@@ -17,9 +17,9 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws AnoopException {
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws AnoopException {
         Task t = tasks.deleteTask(index);
         storage.save(tasks.getTasks());
-        ui.showDeletedTask(t, tasks);
+        return ui.showDeletedTask(t, tasks);
     }
 }
