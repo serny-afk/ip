@@ -11,7 +11,7 @@ import chatbot.task.TaskList;
 import chatbot.ui.Ui;
 
 // --- AI & Code Reuse Declaration ---
-// ChatGPT use: Formatting of JavaDoc comments, JUnit tests, string manipulation methods
+// ChatGPT use: Formatting of JavaDoc comments, JUnit tests, string manipulation methods, code quality
 // ChatGPT use: Debugging and formatting of program
 // Code reuse: Organization of classes and general design for reformatting code inspired by:
 // @omgeta and @lemonishi on CS2103T GitHub, JavaFX tutorial on CS2103T website
