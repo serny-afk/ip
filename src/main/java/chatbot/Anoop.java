@@ -50,16 +50,7 @@ public class Anoop {
     public Anoop() {
         this.ui = new Ui();
         this.storage = new Storage(FILE_PATH);
-
-        TaskList loadedTasks = new TaskList();
-
-        try {
-            loadedTasks = storage.load();
-        } catch (Exception e) {
-            ui.showError("Failed to load tasks: " + e.getMessage());
-        }
-
-        this.taskList = loadedTasks;
+        this.taskList = loadTasks();
     }
 
     /**
@@ -81,17 +72,39 @@ public class Anoop {
      */
     public void run() {
         ui.userWelcome();
+        runCommandLoop();
+    }
+
+    private void runCommandLoop() {
         boolean isExit = false;
 
         while (!isExit) {
             try {
-                String input = ui.readCommand().trim();
-                Command c = Parser.parse(input);
-                c.execute(this.taskList, this.ui, this.storage);
-                isExit = c.isExit();
+                isExit = handleCommand();
             } catch (AnoopException e) {
                 ui.showError(e.getMessage());
             }
+        }
+    }
+
+    private boolean handleCommand() throws AnoopException {
+        Command c = readAndParseCommand();
+        c.execute(this.taskList, this.ui, this.storage);
+        return c.isExit();
+    }
+
+    private Command readAndParseCommand() throws AnoopException {
+        String input = ui.readCommand().trim();
+        return Parser.parse(input);
+
+    }
+
+    private TaskList loadTasks() {
+        try {
+            return this.storage.load();
+        } catch (AnoopException e) {
+            ui.showError(e.getMessage());
+            return new TaskList();
         }
     }
 
