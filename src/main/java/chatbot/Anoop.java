@@ -51,6 +51,9 @@ public class Anoop {
         this.ui = new Ui();
         this.storage = new Storage(FILE_PATH);
 
+        assert this.ui != null : "Ui should be initialized";
+        assert this.storage != null : "Storage should be initialized";
+
         TaskList loadedTasks = new TaskList();
 
         try {
@@ -58,6 +61,8 @@ public class Anoop {
         } catch (Exception e) {
             ui.showError("Failed to load tasks: " + e.getMessage());
         }
+
+        assert loadedTasks != null : "TaskList should not be null";
 
         this.taskList = loadedTasks;
     }
@@ -87,6 +92,9 @@ public class Anoop {
             try {
                 String input = ui.readCommand().trim();
                 Command c = Parser.parse(input);
+
+                assert c != null : "Parsed command should not be null";
+
                 c.execute(this.taskList, this.ui, this.storage);
                 isExit = c.isExit();
             } catch (AnoopException e) {
@@ -96,8 +104,10 @@ public class Anoop {
     }
 
     public String getResponse(String input) {
+        assert input != null : "Input to getResponse should not be null";
         try {
             Command c = Parser.parse(input.trim());
+            assert c != null : "Parsed command should not be null";
             return c.execute(this.taskList, this.ui, this.storage);
         } catch (AnoopException e) {
             return e.getMessage();
