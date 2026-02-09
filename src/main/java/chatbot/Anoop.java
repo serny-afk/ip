@@ -43,33 +43,17 @@ public class Anoop {
 
     /**
      * Constructs a new Anoop chatbot instance.
-     * <p>
      * Initializes the UI, storage, and task list. Loads existing tasks
      * from the specified file path. If loading fails, starts with an empty task list.
      */
     public Anoop() {
         this.ui = new Ui();
         this.storage = new Storage(FILE_PATH);
-
-        assert this.ui != null : "Ui should be initialized";
-        assert this.storage != null : "Storage should be initialized";
-
-        TaskList loadedTasks = new TaskList();
-
-        try {
-            loadedTasks = storage.load();
-        } catch (Exception e) {
-            ui.showError("Failed to load tasks: " + e.getMessage());
-        }
-
-        assert loadedTasks != null : "TaskList should not be null";
-
-        this.taskList = loadedTasks;
+        this.taskList = loadTasks();
     }
 
     /**
      * Entry point of the application.
-     * <p>
      * Creates an instance of {@code Anoop} and starts the main loop.
      *
      * @param args command-line arguments (not used)
@@ -80,26 +64,44 @@ public class Anoop {
 
     /**
      * Starts the main application loop.
-     * <p>
      * Displays a welcome message, reads user input, parses commands,
      * executes them, and continues until the exit command is issued.
      */
     public void run() {
         ui.userWelcome();
+        runCommandLoop();
+    }
+
+    private void runCommandLoop() {
         boolean isExit = false;
 
         while (!isExit) {
             try {
-                String input = ui.readCommand().trim();
-                Command c = Parser.parse(input);
-
-                assert c != null : "Parsed command should not be null";
-
-                c.execute(this.taskList, this.ui, this.storage);
-                isExit = c.isExit();
+                isExit = handleCommand();
             } catch (AnoopException e) {
                 ui.showError(e.getMessage());
             }
+        }
+    }
+
+    private boolean handleCommand() throws AnoopException {
+        Command c = readAndParseCommand();
+        c.execute(this.taskList, this.ui, this.storage);
+        return c.isExit();
+    }
+
+    private Command readAndParseCommand() throws AnoopException {
+        String input = ui.readCommand().trim();
+        return Parser.parse(input);
+
+    }
+
+    private TaskList loadTasks() {
+        try {
+            return this.storage.load();
+        } catch (AnoopException e) {
+            ui.showError(e.getMessage());
+            return new TaskList();
         }
     }
 
