@@ -43,7 +43,6 @@ public class Anoop {
 
     /**
      * Constructs a new Anoop chatbot instance.
-     * <p>
      * Initializes the UI, storage, and task list. Loads existing tasks
      * from the specified file path. If loading fails, starts with an empty task list.
      */
@@ -55,7 +54,6 @@ public class Anoop {
 
     /**
      * Entry point of the application.
-     * <p>
      * Creates an instance of {@code Anoop} and starts the main loop.
      *
      * @param args command-line arguments (not used)
@@ -66,7 +64,6 @@ public class Anoop {
 
     /**
      * Starts the main application loop.
-     * <p>
      * Displays a welcome message, reads user input, parses commands,
      * executes them, and continues until the exit command is issued.
      */

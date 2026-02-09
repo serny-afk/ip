@@ -6,7 +6,6 @@ import chatbot.exception.AnoopException;
 
 /**
  * Represents a list of tasks in the chatbot application.
- * <p>
  * Provides methods to add, delete, and retrieve tasks.
  */
 public class TaskList {
@@ -59,9 +58,11 @@ public class TaskList {
     }
 
     /**
-     * TODO add javadoc
-     * @param index TODO
-     * @throws AnoopException TODO
+     * Deletes the task at the specified index from the list.
+     *
+     * @param index Index of the task to delete (0-based).
+     * @return The task that was deleted.
+     * @throws AnoopException If the index is out of bounds.
      */
     public Task deleteTask(int index) throws AnoopException {
         this.checkIndexValid(index);
@@ -80,10 +81,10 @@ public class TaskList {
     }
 
     /**
-     * Returns a list of tasks matching query
+     * Returns a list of tasks matching the query string.
      *
-     * @param query String input of queried task
-     * @return A new ArrayList with matching results
+     * @param query String input of queried task.
+     * @return A new ArrayList with tasks containing the query in their description.
      */
     public ArrayList<Task> findTasks(String query) {
         ArrayList<Task> matches = new ArrayList<>();
@@ -98,10 +99,11 @@ public class TaskList {
     }
 
     /**
-     * TODO javadoc
-     * @param index 1
-     * @return task
-     * @throws AnoopException exception
+     * Marks the task at the specified index as done.
+     *
+     * @param index Index of the task to mark (0-based).
+     * @return The task that was marked as done.
+     * @throws AnoopException If the index is out of bounds.
      */
     public Task markTask(int index) throws AnoopException {
         checkIndexValid(index);
@@ -111,10 +113,11 @@ public class TaskList {
     }
 
     /**
-     * TODO javadoc
-     * @param index 1
-     * @return task
-     * @throws AnoopException Exception
+     * Marks the task at the specified index as not done.
+     *
+     * @param index Index of the task to unmark (0-based).
+     * @return The task that was marked as not done.
+     * @throws AnoopException If the index is out of bounds.
      */
     public Task unmarkTask(int index) throws AnoopException {
         checkIndexValid(index);
@@ -123,6 +126,12 @@ public class TaskList {
         return t;
     }
 
+    /**
+     * Checks if the provided index is valid for the task list.
+     *
+     * @param index Index to check (0-based).
+     * @throws AnoopException If the index is less than 0 or greater than or equal to the number of tasks.
+     */
     private void checkIndexValid(int index) throws AnoopException {
         if (index < 0 || index >= tasks.size()) {
             throw new AnoopException("index out of bounds");
