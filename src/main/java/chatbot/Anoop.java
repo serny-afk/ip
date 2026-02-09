@@ -106,8 +106,10 @@ public class Anoop {
     }
 
     public String getResponse(String input) {
+        assert input != null : "Input to getResponse should not be null";
         try {
             Command c = Parser.parse(input.trim());
+            assert c != null : "Parsed command should not be null";
             return c.execute(this.taskList, this.ui, this.storage);
         } catch (AnoopException e) {
             return e.getMessage();

@@ -48,6 +48,8 @@ public class Ui {
      * @param tasklist The TaskList to display.
      */
     public String showTaskList(TaskList tasklist) {
+        assert tasklist != null : "TaskList must not be null when displaying tasks";
+
         StringBuilder sb = new StringBuilder();
         sb.append("Here are the tasks in your list:\n");
 
@@ -70,6 +72,7 @@ public class Ui {
      * @param task The task that was added.
      */
     public String showAddedTask(Task task) {
+        assert task != null : "Task to show as added must not be null";
         String output = "Got it. I've added this task:\n" + task.toString();
         System.out.println(output);
         return output;
@@ -114,6 +117,7 @@ public class Ui {
      * @param tasklist The TaskList whose count is displayed.
      */
     public String showTaskCount(TaskList tasklist) {
+        assert tasklist != null : "TaskList must not be null when showing count";
         String output = tasklist.toString();
         System.out.println(output);
         return output;
@@ -136,6 +140,7 @@ public class Ui {
      * @param matchingTasks show tasks
      */
     public String showMatchingTasks(ArrayList<Task> matchingTasks) {
+        assert matchingTasks != null : "Matching tasks list must not be null";
         StringBuilder sb = new StringBuilder();
 
         if (matchingTasks.isEmpty()) {

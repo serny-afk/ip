@@ -24,6 +24,7 @@ public class TaskList {
      * @param tasks Initial list of tasks to include.
      */
     public TaskList(ArrayList<Task> tasks) {
+        assert tasks != null : "Initial task list must not be null";
         this.tasks = new ArrayList<>(tasks);
     }
 
@@ -42,6 +43,7 @@ public class TaskList {
      * @param task The task to add.
      */
     public void addTask(Task task) {
+        assert task != null : "Cannot add a null task to the list";
         this.tasks.add(task);
     }
 
@@ -87,6 +89,8 @@ public class TaskList {
      * @return A new ArrayList with tasks containing the query in their description.
      */
     public ArrayList<Task> findTasks(String query) {
+        assert query != null : "Query string must not be null";
+
         ArrayList<Task> matches = new ArrayList<>();
         String keyword = query.toLowerCase();
 
@@ -108,6 +112,7 @@ public class TaskList {
     public Task markTask(int index) throws AnoopException {
         checkIndexValid(index);
         Task t = tasks.get(index);
+        assert t != null : "Task to mark should not be null";
         t.markAsDone();
         return t;
     }
@@ -122,6 +127,7 @@ public class TaskList {
     public Task unmarkTask(int index) throws AnoopException {
         checkIndexValid(index);
         Task t = tasks.get(index);
+        assert t != null : "Task to unmark should not be null";
         t.markAsUndone();
         return t;
     }

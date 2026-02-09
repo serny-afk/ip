@@ -32,6 +32,7 @@ public class Storage {
      */
     public Storage(Path filePath) {
         this.filePath = filePath;
+        assert filePath != null : "FilePath should not be null";
     }
 
     /**
@@ -42,6 +43,7 @@ public class Storage {
      */
     public TaskList load() throws AnoopException {
         checkFileExists();
+        assert Files.exists(filePath) : "Storage file should exist after checkFileExists()";
 
         ArrayList<Task> tasks = new ArrayList<>();
 
@@ -67,6 +69,7 @@ public class Storage {
      */
     public void save(ArrayList<Task> taskList) throws AnoopException {
         checkFileExists();
+        assert taskList != null : "TaskList must not be null";
 
         try (FileWriter writer = new FileWriter(filePath.toFile())) {
             for (Task task : taskList) {
@@ -95,6 +98,10 @@ public class Storage {
         } catch (IOException e) {
             throw new AnoopException(e.getMessage());
         }
+
+        assert filePath.getParent() == null || Files.exists(filePath.getParent())
+                : "Parent directory should exist after checkFilesExists";
+        assert Files.exists(filePath) : "Storage file should exist after checkFileExists()";
     }
 
     /**
@@ -104,11 +111,13 @@ public class Storage {
      * @return The corresponding Task object, or {@code null} if parsing fails.
      */
     private Task parseTask(String line) {
+        assert line != null : "Input line should not be null";
         if (line.length() < 6) {
             return null;
         }
 
         char type = line.charAt(1);
+        assert type == 'T' || type == 'D' || type == 'E' : "Task must be type T or D or E";
         boolean isDone = line.charAt(4) == 'X';
         String description;
         String extra = null;
