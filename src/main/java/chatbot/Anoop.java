@@ -18,14 +18,11 @@ import chatbot.ui.Ui;
 
 /**
  * Main controller class for the Anoop chatbot application.
- * <p>
  * This class handles the primary application flow, including:
- * <ul>
- *     <li>Initializing the user interface, storage, and task list.</li>
- *     <li>Loading saved tasks from file at startup.</li>
- *     <li>Reading and parsing user commands in a loop.</li>
- *     <li>Executing commands and updating task storage.</li>
- * </ul>
+ *     Initializing the user interface, storage, and task list.</li>
+ *     Loading saved tasks from file at startup.</li>
+ *     Reading and parsing user commands in a loop.</li>
+ *     Executing commands and updating task storage.</li>
  */
 public class Anoop {
 
@@ -72,6 +69,11 @@ public class Anoop {
         runCommandLoop();
     }
 
+    /**
+     * Repeatedly processes user commands until an exit command is encountered.
+     * Any AnoopException thrown during command handling will be caught
+     * and displayed to the user without terminating the program.
+     */
     private void runCommandLoop() {
         boolean isExit = false;
 
@@ -84,18 +86,35 @@ public class Anoop {
         }
     }
 
+    /**
+     * Reads, parses, and executes a single user command.
+     * @return true if the executed command requests program termination, false otherwise
+     * @throws AnoopException if parsing or execution fails
+     */
     private boolean handleCommand() throws AnoopException {
         Command c = readAndParseCommand();
         c.execute(this.taskList, this.ui, this.storage);
         return c.isExit();
     }
 
+    /**
+     * Reads a line of input from the UI and converts it into a Command object
+     *
+     * @return the parsed Command object
+     * @throws AnoopException if the input is invalid or cannot be parsed
+     */
     private Command readAndParseCommand() throws AnoopException {
         String input = ui.readCommand().trim();
         return Parser.parse(input);
 
     }
 
+    /**
+     * Loads tasks from persistent storage.
+     * If loading fails, an error message is shown and an empty task list is returned.
+     *
+     * @return the loaded TaskList, or an empty TaskList if loading fails
+     */
     private TaskList loadTasks() {
         try {
             return this.storage.load();
@@ -105,6 +124,14 @@ public class Anoop {
         }
     }
 
+    /**
+     * Processes a single user input string and returns the chatbot's response.
+     * This method is primarily used for GUI interaction where input is provided
+     * programmatically instead of through standard input.
+     *
+     * @param input the user input command
+     * @return the chatbot's response message
+     */
     public String getResponse(String input) {
         assert input != null : "Input to getResponse should not be null";
         try {

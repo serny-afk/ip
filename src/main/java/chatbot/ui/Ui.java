@@ -136,8 +136,8 @@ public class Ui {
     }
 
     /**
-     * TODO add javadoc
-     * @param matchingTasks show tasks
+     * Displays tasks that match query in find command.
+     * @param matchingTasks Tasks matching the query string.
      */
     public String showMatchingTasks(ArrayList<Task> matchingTasks) {
         assert matchingTasks != null : "Matching tasks list must not be null";
@@ -152,6 +152,29 @@ public class Ui {
             }
         }
         String output = sb.toString();
+        System.out.println(output);
+        return output;
+    }
+
+    /**
+     * Displays help page including commands available.
+     * @return String of available commands.
+     */
+    public String showHelpPage() {
+        String output = """
+                Here are the available commands:
+
+                - todo <description> : Add a todo
+                - deadline <description> /by <time> : Add a deadline
+                - event <description> /from <start> /to <end> : Add an event
+                - list : Show all tasks
+                - mark <taskNumber> : Mark a task as done
+                - unmark <taskNumber> : Unmark a task
+                - delete <taskNumber> : Delete a task
+                - find <keyword> : Search tasks
+                - help : Show this help message
+                - bye : Exit the app
+                """;
         System.out.println(output);
         return output;
     }

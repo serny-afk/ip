@@ -5,6 +5,7 @@ import chatbot.command.Command;
 import chatbot.command.DeleteCommand;
 import chatbot.command.ExitCommand;
 import chatbot.command.FindCommand;
+import chatbot.command.HelpCommand;
 import chatbot.command.ListCommand;
 import chatbot.command.MarkCommand;
 import chatbot.command.UnmarkCommand;
@@ -48,6 +49,7 @@ public class Parser {
         case "deadline" -> c = new AddCommand(parseDeadline(args));
         case "event" -> c = new AddCommand(parseEvent(args));
         case "find" -> c = new FindCommand(args);
+        case "help" -> c = new HelpCommand();
         default -> throw new AnoopException("Command not found");
         }
         return c;
@@ -67,10 +69,10 @@ public class Parser {
     }
 
     /**
-     * TODO add javadoc
-     * @param args
-     * @return
-     * @throws AnoopException
+     * Parses arguments for a todo command and creates a ToDo task.
+     * @param args the description of the todo task.
+     * @return a ToDo task containing the given description
+     * @throws AnoopException if description is empty
      */
 
     public static Task parseToDo(String args) throws AnoopException {
@@ -81,10 +83,10 @@ public class Parser {
     }
 
     /**
-     * TODO add javadoc
-     * @param args
-     * @return
-     * @throws AnoopException
+     * Parses arguments for a deadline command nad creates a Deadline task
+     * @param args the description and time portion of the deadline command
+     * @return a Deadline task with the parsed description and date/time
+     * @throws AnoopException if the description or /by time is missing, or if date/time format invalid
      */
 
     public static Task parseDeadline(String args) throws AnoopException {
@@ -114,12 +116,11 @@ public class Parser {
     }
 
     /**
-     * TODO add javadoc
-     * @param args
-     * @return
-     * @throws AnoopException
+     * Parses argument for an event command and creates an Event task.
+     * @param args the description and time range of the event
+     * @return an Event task with the parsed description, start time, and end time
+     * @throws AnoopException if description, /from, or /to is missing, or if the date/time format is invalid
      */
-
     public static Task parseEvent(String args) throws AnoopException {
         if (args.isEmpty()) {
             throw new AnoopException("Usage: event <description> /from <from> /to <to>");
@@ -152,12 +153,11 @@ public class Parser {
     }
 
     /**
-     * TODO add javadoc
-     * @param args
-     * @return
-     * @throws AnoopException
+     * Parses a task index from the argument string
+     * @param args the arguments containing the task number
+     * @return integer index of the task
+     * @throws AnoopException if the argument is empty, not a number or less than 1
      */
-
     public static int parseIndex(String args) throws AnoopException {
         if (args == null || args.trim().isEmpty()) {
             throw new AnoopException("Task number cannot be empty");
