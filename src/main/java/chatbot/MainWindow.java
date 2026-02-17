@@ -26,7 +26,7 @@ public class MainWindow extends AnchorPane {
     private Anoop anoop;
 
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.jpg"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/duke.jpg"));
+    private Image anoopImage = new Image(this.getClass().getResourceAsStream("/images/duke.jpg"));
 
     @FXML
     public void initialize() {
@@ -38,7 +38,7 @@ public class MainWindow extends AnchorPane {
         anoop = d;
         String welcome = anoop.getWelcomeMessage();
         dialogContainer.getChildren().addAll(
-                DialogBox.getDukeDialog(welcome, dukeImage)
+                DialogBox.getAnoopDialog(welcome, anoopImage)
         );
     }
 
@@ -52,7 +52,7 @@ public class MainWindow extends AnchorPane {
         String response = anoop.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
+                DialogBox.getAnoopDialog(response, anoopImage)
         );
         userInput.clear();
 
