@@ -142,4 +142,15 @@ public class Anoop {
             return e.getMessage();
         }
     }
+
+    /**
+     * Returns the welcome message shown when the application starts.
+     * Used by the GUI to display the initial bot message.
+     *
+     * @return welcome message string
+     */
+    public String getWelcomeMessage() {
+        return this.ui.userWelcome();
+    }
+
 }
