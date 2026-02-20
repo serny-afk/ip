@@ -19,7 +19,7 @@ Features simple, intuitive interface, cross-platform support (Windows, macOs, Li
 
 2. Download the latest ```.jar``` from the [releases page]().
 3. Place the ```.jar``` file in a folder for your application and open a terminal.
-4. Run ```java -jar Duke.jar```
+4. Run ```java -jar Anoop.jar```
 
 ## Features
 
