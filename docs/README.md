@@ -17,7 +17,7 @@ Features simple, intuitive interface, cross-platform support (Windows, macOS, Li
 1. Ensure you have Java 17 or newer versions installed.
 **Mac Users:** Ensure you have the correct JDK version as shown [here](https://se-education.org/guides/tutorials/javaInstallationMac.html)
 
-2. Download the latest ```.jar``` from the [releases page]().
+2. Download the latest ```.jar``` from the [releases page](https://github.com/serny-afk/ip/releases).
 3. Place the ```.jar``` file in a folder for your application and open a terminal.
 4. Run ```java -jar Anoop.jar```
 
