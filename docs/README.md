@@ -1,12 +1,18 @@
 # Anoop Chatbot User Guide
 
 ## Overview
+
+---
+
 Anoop Chatbot is a desktop chatbot application with a chat-style GUI that helps users manage tasks efficiently.
-Features simple, intuitive interface, cross-platform support (Windows, macOs, Linux) and a charismatic personality :smile:
+Features simple, intuitive interface, cross-platform support (Windows, macOs, Linux) and a charismatic personality :)
 
-![Anoop Chatbot GUI](docs/Ui.png)
+![Anoop Chatbot GUI](Ui.png)
+> "I'm simply... the goat" - Anoop 
 
-## Quick Start
+## Quick start
+
+---
 
 1. Ensure you have Java 17 or newer versions installed.
 **Mac Users:** Ensure you have the correct JDK version as shown [here](https://se-education.org/guides/tutorials/javaInstallationMac.html)
@@ -15,7 +21,9 @@ Features simple, intuitive interface, cross-platform support (Windows, macOs, Li
 3. Place the ```.jar``` file in a folder for your application and open a terminal.
 4. Run ```java -jar Duke.jar```
 
-## Feature Summary
+## Features
+
+---
 
 Anoop Chatbot supports adding ```todo```, ```deadline``` and ```event``` tasks. Each task has unique parameters with a ```description``` and an ```isDone``` status. Support for ```find```, ```mark```, ```unmark``` and ```delete``` for these tasks is available.
 
@@ -93,3 +101,10 @@ Format: ```help```
 Closes the chatbot application and saves current state of task list.
 
 Format: ```bye```
+
+## Acknowledgements:
+
+---
+Code reuse credit: @omgeta and @lemonishi on GitHub
+
+README adapted from [AB3 User Guide](https://se-education.org/addressbook-level3/UserGuide.html#viewing-help--help)
