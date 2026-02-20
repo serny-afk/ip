@@ -136,6 +136,13 @@ Format: ``` find <task name>```
 
 Example: ```find study``` returns tasks ```study for midterms``` and ```study for finals```.
 
+Expected Output: 
+```
+Here are the matching tasks found:
+1. [T][] study midterms
+2. [T][] study finals
+```
+
 ### Viewing help: ```help```
 Displays a message containing all available chatbot commands.
 
